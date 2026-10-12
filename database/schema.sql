@@ -82,8 +82,6 @@ CREATE TABLE Usuario_Alcance (
     CONSTRAINT FK_AlcanceEBDI FOREIGN KEY (id_ebdi)
         REFERENCES EBDI(id_ebdi) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
-    -- Solo una columna puede estar llena (Región, Estado, EBDI)
-    -- Evitamos filas contradictorias
     CONSTRAINT CHK_UsuarioAlcance_Nivel CHECK(
         (id_region IS NOT NULL) + (id_estado IS NOT NULL) + (id_ebdi IS NOT NULL) = 1
     ),
@@ -111,13 +109,12 @@ CREATE TABLE Version_Referencia (
     nombre              VARCHAR(40) NOT NULL,
     vigente             BOOLEAN NOT NULL DEFAULT 0,
     id_usuario_carga    INT UNSIGNED NOT NULL,
-    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_TIMESTAMP())
+    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_TIMESTAMP()),
 
     CONSTRAINT FK_VersionUsuario FOREIGN KEY (id_usuario_carga)
         REFERENCES usuario(id_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
     CONSTRAINT UQ_VersionNombre UNIQUE (fuente, nombre),
-    CONSTRAINT UQ_VersionVigente UNIQUE (fuente_vigente)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE Categoria_Nutricional (
@@ -147,7 +144,7 @@ CREATE TABLE Tabla_Referencia (
     valor_L         DECIMAL(12, 8) NOT NULL,
     valor_M         DECIMAL(12, 8) NOT NULL,
     valor_S         DECIMAL(12, 8) NOT NULL,
-    variable_X      DECIMAL(6, 2) NOT NULL,x    
+    variable_X      DECIMAL(6, 2) NOT NULL, 
 
     CONSTRAINT FK_ReferenciaVersion FOREIGN KEY (id_version)
         REFERENCES Version_Referencia(id_version) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -156,9 +153,9 @@ CREATE TABLE Tabla_Referencia (
 
     CONSTRAINT UQ_ReferenciaClave UNIQUE(id_version, id_indicador, sexo, variable_X),
 
-    CONSTRAINT CHK_ReferenciaSEXO CHECK (sexo IN (1, 2))
+    CONSTRAINT CHK_ReferenciaSEXO CHECK (sexo IN (1, 2)),
     CONSTRAINT CHK_ReferenciaMS CHECK (valor_M > 0 AND valor_S > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================================================
 -- Expediente del Infante
@@ -183,8 +180,8 @@ CREATE TABLE Infante (
     sexo                TINYINT UNSIGNED NOT NULL,
     fecha_nacimiento    DATE NOT NULL,
     fecha_ingreso       DATE NOT NULL,
-    talla_madre_cm      DECIMAL(5, 2) NULL
-    talla_padre_cm      DECIMAL(5, 2) NULL
+    talla_madre_cm      DECIMAL(5, 2) NULL,
+    talla_padre_cm      DECIMAL(5, 2) NULL,
     estatus             ENUM("activo", "baja", "egresado") DEFAULT "activo",
 
     CONSTRAINT FK_InfanteEBDI FOREIGN KEY (id_ebdi) 
@@ -195,7 +192,7 @@ CREATE TABLE Infante (
 
     CONSTRAINT CHK_InfanteSexo CHECK (sexo IN (1, 2)),
     CONSTRAINT CHK_InfanteFechas CHECK (fecha_ingreso >= fecha_nacimiento),
-    CONSTRAINT CHK_InfanteCURP CHECK(curp IS NULL OR REGEXP"^[A-Z0-9]{18}$"),
+    CONSTRAINT CHK_InfanteCURP CHECK (curp IS NULL OR curp REGEXP '^[A-Z0-9]{18}$'),
     CONSTRAINT CHK_InfanteTallaMadre CHECK (talla_madre_cm IS NULL OR talla_madre_cm > 0),
     CONSTRAINT CHK_InfanteTallaPadre CHECK (talla_padre_cm IS NULL OR talla_padre_cm > 0),
 
@@ -291,7 +288,7 @@ CREATE TABLE Medicion_Infante (
     CONSTRAINT CHK_MedicionPeso CHECK (peso_kg > 0),
     CONSTRAINT CHK_MedicionTalla CHECK (talla_cm > 0),
     CONSTRAINT CHK_MedicionPerimetro CHECK (
-        perimetro_cefalico_cm IS NULL OR perimetro_cefalico_cm > 0
+        perimetroCefelico_cm IS NULL OR perimetroCefelico_cm > 0
     ),
 
     INDEX IX_Medicion_InfanteFecha (id_infante, fecha)
@@ -305,7 +302,7 @@ CREATE TABLE Evaluacion_Nutricional (
     id_categoria    SMALLINT UNSIGNED NOT NULL,
     z_score         DECIMAL(6, 3) NOT NULL,
     percentil       DECIMAL(5, 2) NULL,
-    flag_biv        TINYINT NOT NULL DEFAULT 0
+    flag_biv        TINYINT NOT NULL DEFAULT 0,
     fecha_calculo   DATE NOT NULL DEFAULT (UTC_TIMESTAMP()),
 
     CONSTRAINT FK_EvaluacionMedicion FOREIGN KEY (id_medicion)
@@ -314,10 +311,10 @@ CREATE TABLE Evaluacion_Nutricional (
         REFERENCES Tabla_Referencia(id_referencia, id_indicador)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT FK_EvaluacionCategoria FOREIGN KEY (id_categoria, id_indicador)
-        REFERENCES Categoria_Nutricional(id_categoria, indicador)
+        REFERENCES Categoria_Nutricional(id_categoria, id_indicador)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
 
-    CONSTRAINT UQ_Evaluacion_MedicionIndicador UNIQUE (id_medicion, id_indicador)
+    CONSTRAINT UQ_Evaluacion_MedicionIndicador UNIQUE (id_medicion, id_indicador),
 
     CONSTRAINT CHK_EvaluacionBIV CHECK (flag_biv IN (-1, 0, 1)),
     CONSTRAINT CHK_EvaluacionPercentil CHECK (percentil BETWEEN 0 AND 100)
