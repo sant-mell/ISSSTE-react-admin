@@ -109,12 +109,12 @@ CREATE TABLE Version_Referencia (
     nombre              VARCHAR(40) NOT NULL,
     vigente             BOOLEAN NOT NULL DEFAULT 0,
     id_usuario_carga    INT UNSIGNED NOT NULL,
-    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_TIMESTAMP()),
+    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_DATE()),
 
     CONSTRAINT FK_VersionUsuario FOREIGN KEY (id_usuario_carga)
         REFERENCES usuario(id_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
-    CONSTRAINT UQ_VersionNombre UNIQUE (fuente, nombre),
+    CONSTRAINT UQ_VersionNombre UNIQUE (fuente, nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE Categoria_Nutricional (
@@ -152,6 +152,7 @@ CREATE TABLE Tabla_Referencia (
         REFERENCES indicador (id_indicador) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
     CONSTRAINT UQ_ReferenciaClave UNIQUE(id_version, id_indicador, sexo, variable_X),
+    CONSTRAINT UQ_ReferenciaIDIndicador UNIQUE (id_referencia, id_indicador),
 
     CONSTRAINT CHK_ReferenciaSEXO CHECK (sexo IN (1, 2)),
     CONSTRAINT CHK_ReferenciaMS CHECK (valor_M > 0 AND valor_S > 0)
@@ -242,8 +243,8 @@ CREATE TABLE Movimiento_Infante (
     id_infante          INT UNSIGNED NOT NULL,
     id_usuario          INT UNSIGNED NOT NULL,
     tipo                ENUM("traslado", "baja") NOT NULL,
-    id_ebdi_origen      SMALLINT UNSIGNED NOT NULL,
-    id_ebdi_destino     SMALLINT UNSIGNED NOT NULL,
+    id_ebdi_origen      SMALLINT UNSIGNED NULL,
+    id_ebdi_destino     SMALLINT UNSIGNED NULL,
     fecha_movimiento    DATE NOT NULL,
     motivo              VARCHAR(255) NULL,
 
@@ -303,7 +304,7 @@ CREATE TABLE Evaluacion_Nutricional (
     z_score         DECIMAL(6, 3) NOT NULL,
     percentil       DECIMAL(5, 2) NULL,
     flag_biv        TINYINT NOT NULL DEFAULT 0,
-    fecha_calculo   DATE NOT NULL DEFAULT (UTC_TIMESTAMP()),
+    fecha_calculo   DATE NOT NULL DEFAULT (UTC_DATE()),
 
     CONSTRAINT FK_EvaluacionMedicion FOREIGN KEY (id_medicion)
         REFERENCES Medicion_Infante(id_medicion) ON DELETE RESTRICT ON UPDATE RESTRICT,
