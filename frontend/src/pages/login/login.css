@@ -1,0 +1,95 @@
+.login {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.5rem;
+  flex: 1;
+}
+.login-info {
+  flex: 1.25;
+}
+.login-tarjeta {
+  flex: 1;
+}
+
+/* ----- Presentación ----- */
+.login-antetitulo {
+  color: var(--guinda);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.login-info h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1.15;
+  margin: 0;
+}
+.login-linea {
+  display: block;
+  width: 10rem;
+  height: 0.25rem;
+  background: var(--dorado);
+  margin: 16px 0;
+}
+.login-descripcion {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #333;
+  max-width: 470px;
+  margin: 0 0 28px;
+}
+
+/* ----- Formulario ----- */
+.login-tarjeta {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.login-tarjeta h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.login-pestanas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.login-pestanas button {
+  height: 2.5rem;
+  border: 0;
+  background: #fff;
+  font: 600 13px var(--sans);
+  color: var(--texto);
+  cursor: pointer;
+}
+.login-pestanas button[aria-selected="true"] {
+  background: var(--guinda-oscuro);
+  color: #fff;
+}
+
+.login-tarjeta .ant-form-item-label > label {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.login-tarjeta .ant-btn-primary {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+.login-contrasena {
+  display: flex;
+  gap: 0.25rem;
+}
+.login-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+}

@@ -141,3 +141,37 @@ router.post("/login-tutor", limiteLogin, async (req, res) => {
   crearSesion(res, { tipo: "tutor", id_infante: infante.id_infante });
   res.json({ mensaje: "Sesión iniciada" });
 });
+
+// GET /api/auth/me
+router.get("/me", verificarSesion, async (req, res) => {
+  const { tipo, id_usuario, id_infante, rol } = req.sesion;
+
+  if (tipo === "tutor") {
+    const [infante] = await pool.query(
+      "SELECT nombre FROM Infante WHERE id_infante = ?",
+      [id_infante],
+    );
+
+    return res.json({
+      id: `tutor-${id_infante}`,
+      tipo,
+      rol: "Madre, padre o tutor",
+      nombre: `Familia de ${descifrar(infante.nombre)}`,
+    });
+  }
+
+  const [usuario] = await pool.query(
+    "SELECT nombre FROM Usuario WHERE id_usuario = ?",
+    [id_usuario],
+  );
+
+  res.json({ id: usuario, tipo, rol, nombre: usuario.nombre });
+});
+
+// POST /api/auth/logout
+router.post("/logout", (req, res) => {
+    res.clearCookie("sesion", opcionesCookie);
+    res.json({ mensaje: "Sesión cerrada" })
+});
+
+export default router;

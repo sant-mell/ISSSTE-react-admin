@@ -7,7 +7,7 @@ import "./login.css";
 
 type TipoAcceso = "Personal" | "Tutor";
 
-const PATRON_CURP = /^[A-Z]\d{6}[HMX][A-Z]{5}[A-Z0-9]\d$/;
+const PATRON_CURP = /^[A-Z]{4}\d{6}[HMX][A-Z]{5}[A-Z0-9]\d$/;
 
 export const Login = () => {
   const [tipo, setTipo] = useState<TipoAcceso>("Personal");

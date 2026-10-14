@@ -7,6 +7,7 @@ import { authProvider } from "./providers/auth";
 import { dataProvider } from "./providers/data";
 import routerProvider, {
   CatchAllNavigate,
+  DocumentTitleHandler,
   NavigateToResource,
 } from "@refinedev/react-router";
 import {
@@ -15,8 +16,10 @@ import {
   ThemedTitle,
   useNotificationProvider,
 } from "@refinedev/antd";
-import { Header } from "antd/es/layout/layout";
+import { Header } from "./components";
+import { Login } from "./pages/login";
 
+// Colores y tipografia para todos los componentes de Ant Design
 const tema = {
   token: {
     colorPrimary: "#9b2247",
@@ -88,9 +91,26 @@ export default function App() {
                   index
                   element={<NavigateToResource resource="infantes" />}
                 />
-                <Route path="/infantes"/>
+                <Route path="/infantes" />
+              </Route>
+
+              {/* Rutas publicas */}
+              <Route
+                element={
+                  <Authenticated
+                    key="publico"
+                    fallback={<Outlet />}
+                    loading={<Outlet />}
+                  >
+                    <NavigateToResource />
+                  </Authenticated>
+                }
+              >
+                <Route path="/login" element={<Login />} />
               </Route>
             </Routes>
+
+            <DocumentTitleHandler handler={() => "Padrón Infantil | ISSSTE"} />
           </Refine>
         </AntdApp>
       </ConfigProvider>
