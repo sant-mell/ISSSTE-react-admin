@@ -132,7 +132,7 @@ export const Login = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Curp de la niña o niño"
+                  label="CURP de la niña o niño"
                   name="curp"
                   normalize={(valor: string) => valor?.toUpperCase().trim()}
                   rules={[

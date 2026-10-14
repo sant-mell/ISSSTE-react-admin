@@ -1,10 +1,105 @@
 :root {
-    --guinda: #9b2247;
-    --guinda-oscuro: #611232;
-    --dorado: #a57f2c;
-    --beige: #f4ede3;
-    --texto: #1f1f1f;
-    --borde: #e3e3e3;
-    --serif: "Noto Serif", Georgia, serif;
-    --sans: "Noto Sans", system-ui, sans-serif;
+  --guinda: #9b2247;
+  --guinda-oscuro: #611232;
+  --dorado: #a57f2c;
+  --beige: #f4ede3;
+  --texto: #1f1f1f;
+  --gris: #5f5f5f;
+  --borde: #e3e3e3;
+  --serif: "Noto Serif", Georgia, serif;
+  --sans: "Noto Sans", system-ui, sans-serif;
+}
+
+.gob {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--sans);
+  color: var(--texto);
+  background: #fff;
+}
+
+.gob-contenedor {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+/* ----- Header ----- */
+.gob-barra {
+  background: var(--guinda-oscuro);
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  padding: 2.5rem;
+}
+.gob-marca {
+  display: flex;
+  align-items: center;
+}
+.gob-marca-img {
+  height: 3rem;
+  width: auto;
+  display: block;
+}
+
+/* ----- Encabezado ----- */
+.gob-encabezado {
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+  padding: 0.8rem 0;
+}
+.gob-logo-img {
+  height: 3rem;
+  width: auto;
+  display: block;
+}
+.gob-sistema {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--borde);
+}
+.gob-sistema strong {
+  font-family: var(--serif);
+  color: var(--guinda-oscuro);
+  font-size: 1.25rem;
+}
+.gob-sistema span {
+  font-size: 0.75rem;
+  color: var(--gris);
+}
+
+/* ----- Footer ----- */
+.gob-pie {
+  margin-top: auto;
+  background: var(--guinda-oscuro);
+  color: #fff;
+  padding: 2rem 0;
+  font-size: 0.8125rem;
+}
+.gob-pie-columnas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5rem;
+  align-items: start;
+}
+.gob-pie-titulo {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.gob-pie h3 {
+  color: #e6d194;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+.gob-pie a {
+  display: block;
+  color: #fff;
+  text-decoration: underline;
 }
