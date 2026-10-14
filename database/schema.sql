@@ -57,7 +57,7 @@ CREATE TABLE Usuario (
     email               VARCHAR(255) NOT NULL,
     nombre              VARCHAR(150) NOT NULL,
     contrasena_hash     VARCHAR(255) NOT NULL, 
-    activo              BOOLEAN DEFAULT 1,
+    activo              BOOLEAN NOT NULL DEFAULT 1,
     intento_fallidos    TINYINT UNSIGNED NOT NULL DEFAULT 0,
 
     CONSTRAINT FK_UsuarioRol FOREIGN KEY (id_rol) 
@@ -109,10 +109,10 @@ CREATE TABLE Version_Referencia (
     nombre              VARCHAR(40) NOT NULL,
     vigente             BOOLEAN NOT NULL DEFAULT 0,
     id_usuario_carga    INT UNSIGNED NOT NULL,
-    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_DATE()),
+    fecha_carga         DATETIME NOT NULL DEFAULT(UTC_TIMESTAMP()),
 
     CONSTRAINT FK_VersionUsuario FOREIGN KEY (id_usuario_carga)
-        REFERENCES usuario(id_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        REFERENCES Usuario(id_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
     CONSTRAINT UQ_VersionNombre UNIQUE (fuente, nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -122,13 +122,13 @@ CREATE TABLE Categoria_Nutricional (
     id_indicador    TINYINT UNSIGNED NOT NULL,
     etiqueta        VARCHAR(40) NOT NULL,
     nivel_riesgo    ENUM("normal", "atención", "riesgo") NOT NULL,
-    z_min           DECIMAL(6, 3) NOT NULL,
-    z_max           DECIMAL(6, 3) NOT NULL,
+    z_min           DECIMAL(6, 3) NULL,
+    z_max           DECIMAL(6, 3) NULL,
 
     CONSTRAINT FK_CategoriaIndicador FOREIGN KEY (id_indicador)
-        REFERENCES indicador(id_indicador) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        REFERENCES Indicador(id_indicador) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
-    CONSTRAINT UQ_CategoriaIndicadorEtiqueta UNIQUE(id_categoria, etiqueta),
+    CONSTRAINT UQ_CategoriaIndicadorEtiqueta UNIQUE(id_indicador, etiqueta),
     CONSTRAINT UQ_CategoriaIDIndicador UNIQUE(id_categoria, id_indicador),
 
     CONSTRAINT CHK_Categoria_RangoZ CHECK (
@@ -149,7 +149,7 @@ CREATE TABLE Tabla_Referencia (
     CONSTRAINT FK_ReferenciaVersion FOREIGN KEY (id_version)
         REFERENCES Version_Referencia(id_version) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT FK_ReferenciaIndicador FOREIGN KEY (id_indicador)
-        REFERENCES indicador (id_indicador) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        REFERENCES Indicador (id_indicador) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
     CONSTRAINT UQ_ReferenciaClave UNIQUE(id_version, id_indicador, sexo, variable_X),
     CONSTRAINT UQ_ReferenciaIDIndicador UNIQUE (id_referencia, id_indicador),
@@ -163,37 +163,37 @@ CREATE TABLE Tabla_Referencia (
 -- =============================================================================
 CREATE TABLE Tutor (
     id_tutor            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nombre              VARCHAR(100) NOT NULL,
-    apellido_paterno    VARCHAR(100) NOT NULL,
-    apellido_materno    VARCHAR(100) NULL,
-    telefono            VARCHAR(15) NOT NULL,
-    email               VARCHAR(255) NOT NULL
+    nombre              VARBINARY(512) NOT NULL,
+    apellido_paterno    VARBINARY(512) NOT NULL,
+    apellido_materno    VARBINARY(512) NULL,
+    telefono            VARBINARY(64) NOT NULL,
+    email               VARBINARY(512) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE Infante (
     id_infante          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_ebdi             SMALLINT UNSIGNED NOT NULL,
     matricula           INT UNSIGNED NOT NULL,
-    curp                CHAR(18) NULL,
-    nombre              VARCHAR (100) NOT NULL,
-    apellido_paterno    VARCHAR(100) NOT NULL,
-    apellido_materno    VARCHAR(100) NOT NULL,
+    curp                VARBINARY(64) NULL,
+    curp_hash           CHAR(64) NULL,
+    nombre              VARBINARY(512) NOT NULL,
+    apellido_paterno    VARBINARY(512) NOT NULL,
+    apellido_materno    VARBINARY(512) NULL,
     sexo                TINYINT UNSIGNED NOT NULL,
     fecha_nacimiento    DATE NOT NULL,
     fecha_ingreso       DATE NOT NULL,
     talla_madre_cm      DECIMAL(5, 2) NULL,
     talla_padre_cm      DECIMAL(5, 2) NULL,
-    estatus             ENUM("activo", "baja", "egresado") DEFAULT "activo",
+    estatus             ENUM("activo", "baja", "egresado") DEFAULT "activo" NOT NULL,
 
     CONSTRAINT FK_InfanteEBDI FOREIGN KEY (id_ebdi) 
         REFERENCES EBDI(id_ebdi) ON DELETE RESTRICT ON UPDATE RESTRICT,
 
     CONSTRAINT UQ_InfanteMatricula UNIQUE (matricula),
-    CONSTRAINT UQ_InfanteCURP UNIQUE (curp),
+    CONSTRAINT UQ_InfanteCURP UNIQUE (curp_hash),
 
     CONSTRAINT CHK_InfanteSexo CHECK (sexo IN (1, 2)),
     CONSTRAINT CHK_InfanteFechas CHECK (fecha_ingreso >= fecha_nacimiento),
-    CONSTRAINT CHK_InfanteCURP CHECK (curp IS NULL OR curp REGEXP '^[A-Z0-9]{18}$'),
     CONSTRAINT CHK_InfanteTallaMadre CHECK (talla_madre_cm IS NULL OR talla_madre_cm > 0),
     CONSTRAINT CHK_InfanteTallaPadre CHECK (talla_padre_cm IS NULL OR talla_padre_cm > 0),
 
@@ -275,8 +275,8 @@ CREATE TABLE Medicion_Infante (
     id_usuario              INT UNSIGNED NOT NULL,
     fecha                   DATE NOT NULL,
     peso_kg                 DECIMAL(5, 2) NOT NULL,
-    talla_cm               DECIMAL(5, 2) NOT NULL,
-    perimetroCefelico_cm    DECIMAL(4, 1) NULL,
+    talla_cm                DECIMAL(5, 2) NOT NULL,
+    perimetro_cefalico_cm   DECIMAL(4, 1) NULL,
     observaciones           VARCHAR(500) NULL,
 
     CONSTRAINT FK_MedicionInfante FOREIGN KEY (id_infante) 
@@ -289,7 +289,7 @@ CREATE TABLE Medicion_Infante (
     CONSTRAINT CHK_MedicionPeso CHECK (peso_kg > 0),
     CONSTRAINT CHK_MedicionTalla CHECK (talla_cm > 0),
     CONSTRAINT CHK_MedicionPerimetro CHECK (
-        perimetroCefelico_cm IS NULL OR perimetroCefelico_cm > 0
+        perimetro_cefalico_cm IS NULL OR perimetro_cefalico_cm > 0
     ),
 
     INDEX IX_Medicion_InfanteFecha (id_infante, fecha)

@@ -1,37 +1,55 @@
+import "dotenv/config";
 import express from "express";
-import cors from "cors";
 import helmet from "helmet";
-import dotenv from "dotenv";
-import pool from "./db.js"; //  Aquí va la extensión corregida
-
-dotenv.config();
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import pool from "./db.js";
+import rutas from "./routes/index.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuraciones de seguridad globales
+// Middlewares y seguridad
 app.use(helmet());
-app.use(cors());
-app.use(express.json()); // Permite recibir JSON en las peticiones
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+app.use(express.json({ limit: "100kb" }));
+app.use(cookieParser());
 
-// Ruta de prueba inicial
-app.get("/api/status", async (req, res) => {
+// Confirmar que DB y servidor responden
+app.get("/api/health", async (req, res) => {
   try {
-    // Probamos una consulta rápida a la base de datos
-    const conn = await pool.getConnection();
-    const rows = await conn.query("SELECT VERSION() as version");
-    conn.release(); // Liberamos la conexión de vuelta al pool
-
+    const result = await pool.query("SELECT 1 AS ok");
     res.json({
-      status: "online",
-      proyecto: "ISSSTE Padrón Infantil",
-      db_version: rows[0].version,
+      estado: "ok",
+      db: "conectado",
     });
   } catch (error) {
-    res.status(500).json({ status: "error", message: error.message });
+    console.error("Error en la conexión a la DB", error);
+    res.status(500).json({
+      estado: "error",
+      db: "desconectado",
+      mensaje: "No se pudo conectar a la base de datos",
+    });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(` Servidor corriendo con éxito en http://localhost:${PORT}`);
+// Rutas de la API
+app.use("/api", rutas);
+
+// Control de errores
+app.use((error, req, res, next) => {
+  const estado = error.status || 500;
+  if (estado === 500) console.error(error);
+
+  res.status(estado).json({
+    mensaje:
+      estado === 500 ? "Error interno del servidor" : "Solicitud invalida",
+  });
 });
+
+// Arranque
+app.listen(PORT, () => {
+  console.log(`API corriendo correctamente en http://localhost:${PORT}`);
+});
+
+export default app;

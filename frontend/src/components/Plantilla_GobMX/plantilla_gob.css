@@ -1,0 +1,10 @@
+:root {
+    --guinda: #9b2247;
+    --guinda-oscuro: #611232;
+    --dorado: #a57f2c;
+    --beige: #f4ede3;
+    --texto: #1f1f1f;
+    --borde: #e3e3e3;
+    --serif: "Noto Serif", Georgia, serif;
+    --sans: "Noto Sans", system-ui, sans-serif;
+}

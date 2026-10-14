@@ -1,58 +1,61 @@
 import type { AuthProvider } from "@refinedev/core";
-import { TOKEN_KEY } from "./constants";
+import { API_URL } from "./constants";
+
+const llamar = (ruta: string, cuerpo?: object) => {
+  const opciones: RequestInit = {
+    method: cuerpo ? "POST" : "GET",
+    headers: { "Content-Type" : "application/json"},
+    credentials: "include"
+  };
+
+  if (cuerpo) opciones.body = JSON.stringify(cuerpo);
+
+  return fetch(`${API_URL}${ruta}`);
+}
 
 export const authProvider: AuthProvider = {
-  login: async ({ username, email, password }) => {
-    if ((username || email) && password) {
-      localStorage.setItem(TOKEN_KEY, username);
-      return {
-        success: true,
-        redirectTo: "/",
-      };
+  login: async ({tipo, ...datos }) => {
+    const ruta = tipo === "tutor" ? "/auth/login-tutor" : "/auth/login";
+    const respuesta = await llamar(ruta, datos);
+
+    if (respuesta.ok) {
+      return {success: true, redirectTo: "/"};
     }
 
+    const {mensaje} = await respuesta.json().catch(() => ({}));
     return {
       success: false,
       error: {
-        name: "LoginError",
-        message: "Invalid username or password",
+        name: "No fue posible iniciar sesión",
+        message: mensaje ?? "Intenta de nuevo",
       },
     };
   },
-  logout: async () => {
-    localStorage.removeItem(TOKEN_KEY);
-    return {
-      success: true,
-      redirectTo: "/login",
-    };
-  },
-  check: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        authenticated: true,
-      };
-    }
 
-    return {
-      authenticated: false,
-      redirectTo: "/login",
-    };
+  logout: async () => {
+    await llamar("/auth/logout", {});
+    return { success: true, redirectTo: "/login"};
   },
-  getPermissions: async () => null,
+
+  check: async () => {
+    const respuesta = await llamar("/auth/me");
+    return respuesta.ok ? { authenticated: true} : { authenticated: false, redirectTo: "login/"};
+  },
+
   getIdentity: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
-      };
-    }
-    return null;
+    const respuesta = await llamar("/auth/me");
+    return respuesta.ok ? (await respuesta.json()).rol : null;
   },
+
+  getPermissions: async () => {
+    const respuesta = await llamar("/auth/me");
+    return respuesta.ok ? (await respuesta.json()).rol : null;
+  },
+
   onError: async (error) => {
-    console.error(error);
-    return { error };
+    if (error?.statusCode === 401) {
+      return { logout: true, redirectTo: "/login", error};
+    }
+    return {};
   },
 };
