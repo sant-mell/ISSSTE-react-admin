@@ -6,7 +6,7 @@ const router = Router();
 
 const CONSULTA = `
     SELECT i.id_infante, i.matricula, i.nombre, i.apellido_paterno, i.apellido_materno,
-    i.sexo i.fecha_nacimiento, i.estatus, e.nombre AS ebdi
+    i.sexo, i.fecha_nacimiento, i.estatus, e.nombre AS ebdi
     FROM Infante i
     JOIN EBDI e ON e.id_ebdi = i.id_ebdi
     JOIN Estado s ON s.id_estado = e.id_estado`;

@@ -15,7 +15,7 @@ const llamar = (ruta: string, cuerpo?: object) => {
 
 export const authProvider: AuthProvider = {
   login: async ({tipo, ...datos }) => {
-    const ruta = tipo === "tutor" ? "/auth/login-tutor" : "/auth/login";
+    const ruta = tipo === "Tutor" ? "/auth/login-tutor" : "/auth/login";
     const respuesta = await llamar(ruta, datos);
 
     if (respuesta.ok) {
