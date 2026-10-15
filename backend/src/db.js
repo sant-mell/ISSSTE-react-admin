@@ -41,7 +41,6 @@ export async function withTransaction(fn) {
 
 // Cifrado de datos personales (AES-256-GCM)
 const CLAVE_CIFRADO = Buffer.from(process.env.CLAVE_CIFRADO ?? "", "hex");
-//const CLAVE_HMAC = Buffer.from(process.env.CLAVE_HMAC ?? "", "hex");
 
 export function cifrar(texto) {
   const iv = crypto.randomBytes(12);
@@ -53,6 +52,7 @@ export function cifrar(texto) {
 
 // Descifrar datos
 export function descifrar(buffer) {
+  if (buffer == null) return null;
   const iv = buffer.subarray(0, 12);
   const tag = buffer.subarray(12, 28);
   const datos = buffer.subarray(28);

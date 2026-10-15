@@ -58,7 +58,7 @@ CREATE TABLE Usuario (
     nombre              VARCHAR(150) NOT NULL,
     contrasena_hash     VARCHAR(255) NOT NULL, 
     activo              BOOLEAN NOT NULL DEFAULT 1,
-    intento_fallidos    TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    intentos_fallidos    TINYINT UNSIGNED NOT NULL DEFAULT 0,
 
     CONSTRAINT FK_UsuarioRol FOREIGN KEY (id_rol) 
         REFERENCES Rol(id_rol) ON DELETE RESTRICT ON UPDATE RESTRICT,

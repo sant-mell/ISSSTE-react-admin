@@ -23,7 +23,7 @@ router.get("/", verificarSesion, async (req, res) => {
     ]);
   } else {
     // El personal del ISSSTE pueden ver hasta lo que su alcance los permite
-    // Nacional, Regional o EBDI
+    // Nacional, Regional, Estado o EBDI
     filas = await pool.query(
       `${CONSULTA} WHERE ? = 1 OR EXISTS (
         SELECT 1 FROM Usuario_Alcance a

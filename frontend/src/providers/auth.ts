@@ -10,7 +10,7 @@ const llamar = (ruta: string, cuerpo?: object) => {
 
   if (cuerpo) opciones.body = JSON.stringify(cuerpo);
 
-  return fetch(`${API_URL}${ruta}`);
+  return fetch(`${API_URL}${ruta}`, opciones);
 }
 
 export const authProvider: AuthProvider = {
@@ -39,12 +39,12 @@ export const authProvider: AuthProvider = {
 
   check: async () => {
     const respuesta = await llamar("/auth/me");
-    return respuesta.ok ? { authenticated: true} : { authenticated: false, redirectTo: "login/"};
+    return respuesta.ok ? { authenticated: true} : { authenticated: false, redirectTo: "/login"};
   },
 
   getIdentity: async () => {
     const respuesta = await llamar("/auth/me");
-    return respuesta.ok ? (await respuesta.json()).rol : null;
+    return respuesta.ok ? await respuesta.json() : null;
   },
 
   getPermissions: async () => {

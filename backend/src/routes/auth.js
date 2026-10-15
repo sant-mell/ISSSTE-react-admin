@@ -72,7 +72,7 @@ router.post("/login", limiteLogin, async (req, res) => {
   }
 
   const [usuario] = await pool.query(
-    `SELECT u.id_usuario, u.contrasena_hash, u.activo, u.intentos_fallidos
+    `SELECT u.id_usuario, u.contrasena_hash, u.activo, u.intentos_fallidos,
         r.rol, r.alcance_nacional
     FROM Usuario u JOIN Rol r ON r.id_rol = u.id_rol
     WHERE u.email = ?`,
@@ -165,7 +165,7 @@ router.get("/me", verificarSesion, async (req, res) => {
     [id_usuario],
   );
 
-  res.json({ id: usuario, tipo, rol, nombre: usuario.nombre });
+  res.json({ id: id_usuario, tipo, rol, nombre: usuario.nombre });
 });
 
 // POST /api/auth/logout
