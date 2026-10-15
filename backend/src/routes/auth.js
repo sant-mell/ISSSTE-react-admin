@@ -2,7 +2,7 @@ import { Router } from "express";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
-import pool, { descifrar } from "../db.js";
+import pool, { descifrar, hashCurp } from "../db.js";
 
 const router = Router();
 
@@ -121,8 +121,8 @@ router.post("/login-tutor", limiteLogin, async (req, res) => {
   const [infante] = await pool.query(
     `SELECT id_infante, apellido_paterno, apellido_materno
     FROM Infante
-    WHERE matricula = ? AND curp = ? AND estatus = 'activo'`,
-    [matricula, curp],
+    WHERE matricula = ? AND curp_hash = ? AND estatus = 'activo'`,
+    [matricula, hashCurp(curp)],
   );
 
   const valida =
@@ -170,8 +170,8 @@ router.get("/me", verificarSesion, async (req, res) => {
 
 // POST /api/auth/logout
 router.post("/logout", (req, res) => {
-    res.clearCookie("sesion", opcionesCookie);
-    res.json({ mensaje: "Sesión cerrada" })
+  res.clearCookie("sesion", opcionesCookie);
+  res.json({ mensaje: "Sesión cerrada" });
 });
 
 export default router;

@@ -2,7 +2,7 @@ import mariadb from "mariadb";
 import dotenv from "dotenv";
 import crypto from "node:crypto";
 
-dotenv.config(); 
+dotenv.config();
 
 const pool = mariadb.createPool({
   host: process.env.DB_HOST,
@@ -22,7 +22,7 @@ console.log("Conectando a MariaDB...");
 export default pool;
 
 // Operaciones de varios pasos, función que debe fallar
-// En caso de que uno de los pasos falle 
+// En caso de que uno de los pasos falle
 export async function withTransaction(fn) {
   const conexion = await pool.getConnection();
 
@@ -30,22 +30,26 @@ export async function withTransaction(fn) {
     await conexion.beginTransaction();
     const resultado = await fn(conexion);
     await conexion.commit();
-    return resultado; 
+    return resultado;
   } catch (error) {
     await conexion.rollback();
     throw error;
   } finally {
     conexion.release();
-  } 
+  }
 }
 
 // Cifrado de datos personales (AES-256-GCM)
 const CLAVE_CIFRADO = Buffer.from(process.env.CLAVE_CIFRADO ?? "", "hex");
+const CLAVE_HMAC = Buffer.from(process.env.CLAVE_HMAC ?? "", "hex");
 
 export function cifrar(texto) {
   const iv = crypto.randomBytes(12);
   const cifrador = crypto.createCipheriv("aes-256-gcm", CLAVE_CIFRADO, iv);
-  const datos = Buffer.concat([cifrador.update(String(texto), "utf8"), cifrador.final()]);
+  const datos = Buffer.concat([
+    cifrador.update(String(texto), "utf8"),
+    cifrador.final(),
+  ]);
 
   return Buffer.concat([iv, cifrador.getAuthTag(), datos]);
 }
@@ -60,5 +64,15 @@ export function descifrar(buffer) {
   const descifrador = crypto.createDecipheriv("aes-256-gcm", CLAVE_CIFRADO, iv);
   descifrador.setAuthTag(tag);
 
-  return Buffer.concat([descifrador.update(datos), descifrador.final()]).toString("utf8");
+  return Buffer.concat([
+    descifrador.update(datos),
+    descifrador.final(),
+  ]).toString("utf8");
+}
+
+export function hashCurp(curp) {
+  return crypto
+    .createHmac("sha256", CLAVE_HMAC)
+    .update(String(curp).trim().toUpperCase())
+    .digest("hex");
 }
