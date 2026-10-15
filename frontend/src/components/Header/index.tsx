@@ -1,34 +1,29 @@
-import { useGetIdentity, useLogout } from "@refinedev/core";
-import type { RefineThemedLayoutHeaderProps } from "@refinedev/antd";
-import { Button, Layout, Space, Tag, theme } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import { useGetIdentity } from "@refinedev/core";
+import { Layout, Space, Typography } from "antd";
 
-export const Header = ({ sticky = true }: RefineThemedLayoutHeaderProps) => {
-  const { token } = theme.useToken();
-  const { data: rol } = useGetIdentity<string | null>();
-  const { mutate: cerrarSesion, isPending } = useLogout();
+type Identidad = { nombre: string; rol: string };
+
+export const Header = () => {
+  const { data: usuario } = useGetIdentity<Identidad>();
 
   return (
     <Layout.Header
       style={{
+        background: "#fff",
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "center",
-        padding: "0 24px",
-        height: 64,
-        background: token.colorBgElevated,
-        ...(sticky ? { position: "sticky", top: 0, zIndex: 1 } : {}),
+        padding: "0 2rem",
+        borderBottom: "1px solid #e6e6e6",
       }}
     >
-      <Space>
-        {rol && <Tag color="#9b2247">{rol}</Tag>}
-        <Button
-          icon={<LogoutOutlined />}
-          loading={isPending}
-          onClick={() => cerrarSesion()}
-        >
-          Cerrar sesión
-        </Button>
+      <Space
+        direction="vertical"
+        size={0}
+        style={{ lineHeight: 1.3, textAlign: "right" }}
+      >
+        <Typography.Text strong>{usuario?.nombre}</Typography.Text>
+        <Typography.Text type="secondary">{usuario?.rol}</Typography.Text>
       </Space>
     </Layout.Header>
   );
