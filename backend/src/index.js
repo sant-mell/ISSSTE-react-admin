@@ -5,8 +5,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import pool from "./db.js";
 import rutas from "./routes/index.js";
+import fs from "node:fs";
+import https from "node:https";
 
 const app = express();
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 3000;
 
 // Middlewares y seguridad
@@ -48,8 +52,15 @@ app.use((error, req, res, next) => {
 });
 
 // Arranque
-app.listen(PORT, () => {
-  console.log(`API corriendo correctamente en http://localhost:${PORT}`);
+const HOST = process.env.HOST || "127.0.0.1";
+
+const options = {
+  key: fs.readFileSync("./mi_llave.key"),
+  cert: fs.readFileSync("./mi_certificado.crt"),
+};
+
+https.createServer(options, app).listen(PORT, HOST, () => {
+  console.log(`API corriendo con HTTPS en https://${HOST}:${PORT}`);
 });
 
 export default app;

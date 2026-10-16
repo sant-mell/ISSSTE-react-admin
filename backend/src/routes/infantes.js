@@ -42,6 +42,7 @@ router.get("/", verificarSesion, async (req, res) => {
     apellido_materno: descifrar(f.apellido_materno),
     sexo: f.sexo === 1 ? "Hombre" : "Mujer",
     fecha_nacimiento: f.fecha_nacimiento,
+    curp: f.curp,
     estatus: f.estatus,
     ebdi: f.ebdi,
   }));

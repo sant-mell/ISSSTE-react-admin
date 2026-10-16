@@ -1,6 +1,7 @@
 import mariadb from "mariadb";
 import dotenv from "dotenv";
 import crypto from "node:crypto";
+import fs from "node:fs";
 
 dotenv.config();
 
@@ -16,6 +17,12 @@ const pool = mariadb.createPool({
   bigIntAsNumber: true,
   insertIdAsNumber: true,
   dateStrings: true,
+  ssl: process.env.DB_SSL_CA
+    ? {
+        ca: fs.readFileSync(process.env.DB_SSL_CA, "utf8"),
+        rejectUnauthorized: true,
+      }
+    : undefined,
 });
 
 console.log("Conectando a MariaDB...");

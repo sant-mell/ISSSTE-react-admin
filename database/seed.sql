@@ -1,4 +1,4 @@
---  LOGIN PERSONAL ISSSTE  (contraseña de todos: Prueba123!)
+--  LOGIN PERSONAL ISSSTE  (contraseña de todos:    !)
 --    admin@issste.gob.mx            Administrador · alcance nacional
 --    coord.este@issste.gob.mx       Coordinador · región Este
 --    coord.norte@issste.gob.mx      Coordinador · región Norte
@@ -16,8 +16,6 @@
 -- =============================================================================
 
 SET NAMES utf8mb4;
-
--- Limpieza (solo desarrollo)
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE Evaluacion_Nutricional;
 TRUNCATE TABLE Tabla_Referencia;

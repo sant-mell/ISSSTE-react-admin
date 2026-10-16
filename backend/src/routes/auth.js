@@ -11,7 +11,7 @@ const MAX_INTENTOS = 5;
 
 const opcionesCookie = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: true,
   sameSite: "strict",
   path: "/",
 };
