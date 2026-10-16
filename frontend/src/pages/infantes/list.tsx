@@ -9,16 +9,17 @@ type Infante = {
   apellido_materno: string | null;
   sexo: string;
   fecha_nacimiento: string;
+  curp: string;
   estatus: string;
   ebdi: string;
 };
 
 export const ListaInfantes = () => {
-  const { tablaProps } = useTable<Infante>();
+  const { tableProps } = useTable<Infante>();
 
   return (
     <List title="Infantes">
-      <Table {...tablaProps} rowKey={"id"}>
+      <Table {...tableProps} rowKey={"id"}>
         <Table.Column dataIndex={"matricula"} title="Matrícula" />
         <Table.Column<Infante>
           title="Nombre"
@@ -28,6 +29,7 @@ export const ListaInfantes = () => {
         />
         <Table.Column dataIndex={"sexo"} title="Sexo" />
         <Table.Column dataIndex={"ebdi"} title="EBDI" />
+        <Table.Column dataIndex={"curp"} title="EBDI" />
       </Table>
     </List>
   );

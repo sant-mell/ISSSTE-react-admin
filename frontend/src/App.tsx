@@ -11,6 +11,7 @@ import routerProvider, {
   NavigateToResource,
 } from "@refinedev/react-router";
 import {
+  ErrorComponent,
   ThemedLayout,
   ThemedSider,
   ThemedTitle,
@@ -18,6 +19,7 @@ import {
 } from "@refinedev/antd";
 import { Header } from "./components";
 import { Login } from "./pages/login";
+import { ListaInfantes } from "./pages/infantes";
 
 // Colores y tipografia para todos los componentes de Ant Design
 const tema = {
@@ -91,7 +93,8 @@ export default function App() {
                   index
                   element={<NavigateToResource resource="infantes" />}
                 />
-                <Route path="/infantes" />
+                <Route path="/infantes" element={<ListaInfantes />} />
+                <Route path="*" element={<ErrorComponent />} />
               </Route>
 
               {/* Rutas publicas */}
