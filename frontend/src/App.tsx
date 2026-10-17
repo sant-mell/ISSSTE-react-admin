@@ -16,7 +16,7 @@ import { Login } from "./pages/login";
 import "@ant-design/v5-patch-for-react-19";
 import { Inicio } from "./pages/inicio/index.tsx";
 import { PERSONAL } from "./utils/padron";
-import { ListaInfantes } from "./pages/infantes";
+import { ListaInfantes, FichaInfante } from "./pages/infantes";
 //import { EditarInfante, FichaInfante, ListaInfantes } from "./pages/infantes";
 //import { RegistrarMedicion } from "./pages/mediciones";
 //import { EditarUsuario, ListaUsuarios, NuevoUsuario } from "./pages/usuarios";
@@ -80,15 +80,17 @@ export default function App() {
                 }
               >
                 <Route index element={<Inicio />} />
-                <Route
-                  path="/infantes"
-                  element={
-                    <SoloRoles roles={PERSONAL}>
-                      <ListaInfantes />
-                    </SoloRoles>
-                  }
-                />
-                <Route path="*" element={<ErrorComponent />} />
+                <Route path="/infantes">
+                  <Route
+                    index
+                    element={
+                      <SoloRoles roles={PERSONAL}>
+                        <ListaInfantes />
+                      </SoloRoles>
+                    }
+                  />
+                  <Route path=":id" element={<FichaInfante />} />
+                </Route>
               </Route>
 
               {/* Rutas publicas */}

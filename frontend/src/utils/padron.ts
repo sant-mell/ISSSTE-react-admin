@@ -72,10 +72,24 @@ export const INDICADORES = {
 } as const;
 export type CodigoIndicador = keyof typeof INDICADORES;
 
+export const COLOR_NIVEL: Record<string, string> = {
+  normal: "green",
+  precaución: "gold",
+  riesgo: "red",
+};
+
 export const MEDICION_CADA_DIAS = 45;
 
 export const formatoFecha = (fecha: string) =>
   dayjs(fecha).format("DD/MM/YYYY");
+
+export function formatoEdad(fechaNacimiento: string) {
+  const meses = dayjs().diff(dayjs(fechaNacimiento), "month");
+  const years = Math.floor(meses / 12);
+  return `${years} ${years === 1 ? "año" : "años"} ${meses % 12} ${
+    meses % 12 === 1 ? "mes" : "meses"
+  }`;
+}
 
 export function tallaBlancoFamiliar(
   madre?: number | null,
@@ -91,4 +105,11 @@ export const propsFecha = {
     value: valor ? dayjs(valor) : undefined,
   }),
   normalize: (valor?: dayjs.Dayjs) => valor?.format("YYYY-MM-DD"),
+};
+
+export const aCapital = (texto?: string) => {
+  if (!texto) return "";
+  return texto
+    .toLowerCase()
+    .replace(/(^\p{L}|[\s\-_]\p{L})/gu, (c) => c.toUpperCase());
 };
