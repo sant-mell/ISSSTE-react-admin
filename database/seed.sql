@@ -1,4 +1,4 @@
---  LOGIN PERSONAL ISSSTE  (contraseña de todos:    !)
+--  LOGIN PERSONAL ISSSTE  (contraseña de todos: Prueba123!)
 --    admin@issste.gob.mx            Administrador · alcance nacional
 --    coord.este@issste.gob.mx       Coordinador · región Este
 --    coord.norte@issste.gob.mx      Coordinador · región Norte

@@ -51,6 +51,9 @@ const CLAVE_CIFRADO = Buffer.from(process.env.CLAVE_CIFRADO ?? "", "hex");
 const CLAVE_HMAC = Buffer.from(process.env.CLAVE_HMAC ?? "", "hex");
 
 export function cifrar(texto) {
+  // Evitar cifrados nulos
+  if (texto === null || texto === undefined || texto === "") return null;
+
   const iv = crypto.randomBytes(12);
   const cifrador = crypto.createCipheriv("aes-256-gcm", CLAVE_CIFRADO, iv);
   const datos = Buffer.concat([

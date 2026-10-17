@@ -7,6 +7,8 @@
 -- =============================================================================
 -- Catalogo Organizacional
 -- =============================================================================
+SET NAMES utf8mb4;
+
 CREATE TABLE Region (
     id_region   TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(50) NOT NULL,

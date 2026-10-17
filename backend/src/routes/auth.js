@@ -7,7 +7,14 @@ import pool, { descifrar, hashCurp } from "../db.js";
 const router = Router();
 
 const MINUTOS_SESION = 15;
-const MAX_INTENTOS = 5;
+export const MAX_INTENTOS = 5;
+
+// Roles del personal del ISSSTE
+export const PERSONAL = [
+  "Administrador",
+  "Coordinador regional",
+  "Personal de estancia",
+];
 
 const opcionesCookie = {
   httpOnly: true,
@@ -39,7 +46,7 @@ function crearSesion(res, datos) {
 }
 
 // Normalizar textos (acentos, espacios, mayúsculas, etc)
-function normalizar(texto) {
+export function normalizar(texto) {
   return (texto ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -47,19 +54,61 @@ function normalizar(texto) {
     .toUpperCase();
 }
 
-export function verificarSesion(req, res, next) {
+export async function verificarSesion(req, res, next) {
   const token = req.cookies.sesion;
   if (!token) return res.status(401).json({ mensaje: "Sesión no iniciada" });
 
+  let datos;
   try {
-    const { iat, exp, ...datos } = jwt.verify(token, process.env.JWT_SECRET);
-    req.sesion = datos;
-    crearSesion(res, datos);
-    next();
+    const { iat, exp, ...resto } = jwt.verify(token, process.env.JWT_SECRET);
+    datos = resto;
   } catch {
     res.clearCookie("sesion", opcionesCookie);
     return res.status(401).json({ mensaje: "La sesión expiró" });
   }
+
+  // El rol, alcance y estado se leen en cada petición
+  // Un cambio hecho por el admin se aplica inmediatamente
+  if (datos.tipo === "personal") {
+    const [usuario] = await pool.query(
+      `SELECT u.activo, r.rol, r.alcance_nacional
+      FROM Usuario u JOIN Rol r ON r.id_rol = u.id_rol
+      WHERE u.id_usuario = ?`,
+      [datos.id_usuario],
+    );
+
+    if (!usuario?.activo) {
+      res.clearCookie("sesion", opcionesCookie);
+      return res.status(401).json({ mensaje: "Tu cuenta fue desactivada" });
+    }
+    datos.rol = usuario.rol;
+    datos.nacional = usuario.alcance_nacional;
+  }
+
+  req.sesion = datos;
+  crearSesion(res, datos);
+  next();
+}
+
+// Solo pueden acceder los roles indicados a las paginas permitadas
+export function soloRoles(...roles) {
+  return (req, res, next) =>
+    roles.includes(req.sesion.rol)
+      ? next()
+      : res.status(403).json({ mensaje: "No tienes permiso para esta acción" });
+}
+
+export function filtroAlcance({ tipo, id_infante, id_usuario, nacional }) {
+  if (tipo === "tutor")
+    return { sql: "i.id_infante = ?", params: [id_infante] };
+  if (nacional) return { sql: "1 = 1", params: [] };
+  return {
+    sql: `EXISTS (
+      SELECT 1 FROM Usuario_Alcance a
+      WHERE a.id_usuario = ?
+      AND (a.id_ebdi = e.id_ebdi OR a.id_estado = s.id_estado OR a.id_region = s.id_region))`,
+    params: [id_usuario],
+  };
 }
 
 // POST /api/auth/login --> Personal ISSSTE (correo + contraseña)
@@ -90,7 +139,7 @@ router.post("/login", limiteLogin, async (req, res) => {
         [usuario.id_usuario, MAX_INTENTOS],
       );
     }
-    return res.status(400).json({ mensaje: "Correo o contraseña incorrectos" });
+    return res.status(401).json({ mensaje: "Correo o contraseña incorrectos" });
   }
 
   if (!usuario.activo || usuario.intentos_fallidos >= MAX_INTENTOS) {
@@ -154,6 +203,7 @@ router.get("/me", verificarSesion, async (req, res) => {
 
     return res.json({
       id: `tutor-${id_infante}`,
+      id_infante,
       tipo,
       rol: "Madre, padre o tutor",
       nombre: `Familia de ${descifrar(infante.nombre)}`,

@@ -1,25 +1,29 @@
-import { BrowserRouter, Outlet, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router";
 import { App as AntdApp, ConfigProvider } from "antd";
 import esEs from "antd/locale/es_ES";
-import { TeamOutlined } from "@ant-design/icons";
+import "dayjs/locale/es";
+import dayjs from "dayjs";
 import { Authenticated, Refine } from "@refinedev/core";
-import { authProvider } from "./providers/auth";
-import { dataProvider } from "./providers/data";
+import { ErrorComponent, useNotificationProvider } from "@refinedev/antd";
 import routerProvider, {
   CatchAllNavigate,
   DocumentTitleHandler,
-  NavigateToResource,
 } from "@refinedev/react-router";
-import {
-  ErrorComponent,
-  ThemedLayout,
-  ThemedSider,
-  ThemedTitle,
-  useNotificationProvider,
-} from "@refinedev/antd";
-import { Header } from "./components";
+import { authProvider } from "./providers/auth";
+import { dataProvider } from "./providers/data";
+import { LayoutPrivado, SoloRoles } from "./components";
 import { Login } from "./pages/login";
+import "@ant-design/v5-patch-for-react-19";
+import { Inicio } from "./pages/inicio/index.tsx";
+import { PERSONAL } from "./utils/padron";
 import { ListaInfantes } from "./pages/infantes";
+//import { EditarInfante, FichaInfante, ListaInfantes } from "./pages/infantes";
+//import { RegistrarMedicion } from "./pages/mediciones";
+//import { EditarUsuario, ListaUsuarios, NuevoUsuario } from "./pages/usuarios";
+//import { EditarEbdi, ListaEbdi } from "./pages/ebdi";
+//import { PERSONAL, ROL } from "./utils/padron";
+
+dayjs.locale("es");
 
 // Colores y tipografia para todos los componentes de Ant Design
 const tema = {
@@ -57,10 +61,6 @@ export default function App() {
               {
                 name: "infantes",
                 list: "/infantes",
-                meta: {
-                  label: "Infantes",
-                  icon: <TeamOutlined />,
-                },
               },
             ]}
             options={{ syncWithLocation: true, disableTelemetry: true }}
@@ -73,27 +73,21 @@ export default function App() {
                     key="privado"
                     fallback={<CatchAllNavigate to="/login" />}
                   >
-                    <ThemedLayout
-                      Header={Header}
-                      Sider={(props) => <ThemedSider {...props} fixed />}
-                      Title={({ collapsed }) => (
-                        <ThemedTitle
-                          collapsed={collapsed}
-                          text="Padrón Infantil"
-                        />
-                      )}
-                    >
+                    <LayoutPrivado>
                       <Outlet />
-                      {/* Indispensable para renderizar las vistas hijas */}
-                    </ThemedLayout>
+                    </LayoutPrivado>
                   </Authenticated>
                 }
               >
+                <Route index element={<Inicio />} />
                 <Route
-                  index
-                  element={<NavigateToResource resource="infantes" />}
+                  path="/infantes"
+                  element={
+                    <SoloRoles roles={PERSONAL}>
+                      <ListaInfantes />
+                    </SoloRoles>
+                  }
                 />
-                <Route path="/infantes" element={<ListaInfantes />} />
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
 
@@ -105,7 +99,7 @@ export default function App() {
                     fallback={<Outlet />}
                     loading={<Outlet />}
                   >
-                    <NavigateToResource />
+                    <Navigate to="/" replace />
                   </Authenticated>
                 }
               >

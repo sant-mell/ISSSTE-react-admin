@@ -1,0 +1,22 @@
+.menu-privado {
+  background: #f6f6f6;
+  border-bottom: 1px solid var(--borde);
+}
+.menu-privado .ant-menu {
+    flex: 1;
+    background: transparent;
+    border-bottom: 0;
+}
+.menu-privado .ant-menu-item-selected {
+    font-weight: 700;
+}
+.menu-privado .ant-menu-horizontal > .ant-menu-item-selected::after {
+    border-bottom-color: var(--dorado) !important;
+    border-bottom-width: 3px !important;
+}
+
+.contenido-privado {
+    display: block;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+}

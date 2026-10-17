@@ -103,3 +103,21 @@
   color: #fff;
   text-decoration: underline;
 }
+
+.gob-acciones {
+  margin-left: auto;
+}
+@media (max-width: 720px) {
+  .gob-encabezado .gob-contenedor {
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+  }
+  .gob-acciones {
+    margin-left: 0;
+    width: 100%;
+  }
+  .gob-pie-columnas {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

@@ -1,30 +1,24 @@
-import { useGetIdentity } from "@refinedev/core";
-import { Layout, Space, Typography } from "antd";
-
-type Identidad = { nombre: string; rol: string };
+import { useGetIdentity, useLogout } from "@refinedev/core";
+import { Button, Space, Typography } from "antd";
+import { LogoutOutlined } from "@ant-design/icons";
+import type { Identidad } from "../../utils/padron";
 
 export const Header = () => {
   const { data: usuario } = useGetIdentity<Identidad>();
+  const { mutate: cerrarSesion } = useLogout();
 
   return (
-    <Layout.Header
-      style={{
-        background: "#fff",
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        padding: "0 2rem",
-        borderBottom: "1px solid #e6e6e6",
-      }}
-    >
-      <Space
-        direction="vertical"
-        size={0}
-        style={{ lineHeight: 1.3, textAlign: "right" }}
-      >
+    <Space size="middle">
+      <div style={{ textAlign: "right", lineHeight: 1.3 }}>
         <Typography.Text strong>{usuario?.nombre}</Typography.Text>
-        <Typography.Text type="secondary">{usuario?.rol}</Typography.Text>
-      </Space>
-    </Layout.Header>
+        <br />
+        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+          {usuario?.rol}
+        </Typography.Text>
+      </div>
+      <Button icon={<LogoutOutlined />} onClick={() => cerrarSesion()}>
+        Cerrar sesión
+      </Button>
+    </Space>
   );
 };

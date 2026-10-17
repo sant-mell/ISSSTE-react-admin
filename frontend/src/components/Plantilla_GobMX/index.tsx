@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import "./plantilla_gob.css";
 
-export const PlantillaGob = ({ children }: { children: ReactNode }) => (
+type Props = {
+  children: ReactNode;
+  acciones?: ReactNode;
+};
+
+export const PlantillaGob = ({ children, acciones }: Props) => (
   <div className="gob">
     <header>
       {/* Franja guinda: logo del Gobierno de México */}
@@ -29,6 +34,7 @@ export const PlantillaGob = ({ children }: { children: ReactNode }) => (
             <strong>Padrón Infantil</strong>
             <span>Crecimiento y Desarrollo Saludable</span>
           </div>
+          {acciones && <div className="gob-acciones">{acciones}</div>}
         </div>
       </div>
     </header>
