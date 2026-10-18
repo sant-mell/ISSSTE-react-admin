@@ -4,7 +4,7 @@ import esEs from "antd/locale/es_ES";
 import "dayjs/locale/es";
 import dayjs from "dayjs";
 import { Authenticated, Refine } from "@refinedev/core";
-import { ErrorComponent, useNotificationProvider } from "@refinedev/antd";
+import { useNotificationProvider } from "@refinedev/antd";
 import routerProvider, {
   CatchAllNavigate,
   DocumentTitleHandler,

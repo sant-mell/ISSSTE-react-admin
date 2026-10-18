@@ -18,7 +18,7 @@ export function edadEnMeses(fechaNacimiento, fecha) {
 
 // Menores de 24 meses usan OMS
 // Mayores de 24 meses usan CDC
-export const fuenteCon = (edadMeses) => (edadMeses < 24 ? "WHO" : "CDC");
+export const fuentePara = (edadMeses) => (edadMeses < 24 ? "OMS" : "CDC");
 
 export const imc = (pesoKg, tallaCm) => pesoKg / (tallaCm / 100) ** 2;
 
@@ -85,7 +85,7 @@ export async function evaluarMedicion(db, idMedicion) {
   );
 
   const edad = edadEnMeses(m.fecha_nacimiento, m.fecha);
-  const fuente = fuenteCon(edad);
+  const fuente = fuentePara(edad);
 
   const valores = {
     wa: { x: edad, y: m.peso_kg },

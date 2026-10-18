@@ -24,7 +24,6 @@ import {
   Empty,
   Flex,
   List,
-  Modal,
   Result,
   Row,
   Segmented,
@@ -41,13 +40,16 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { useCorregirMedicion } from "../../hooks/useCorregirMedicion";
+import { GraficaCrecimiento } from "../../components";
+import "./ficha.css";
 
 export const FichaInfante = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [indicador, setIndicador] = useState<CodigoIndicador>("ha");
   const { data: yo } = useGetIdentity<Identidad>();
-  //const { corregir, modal } = useCorregirMedicion();
+  const { corregir, modal } = useCorregirMedicion();
 
   // GET api/infantes/:id
   // GET api/mediciones?id_infante=id
@@ -165,7 +167,7 @@ export const FichaInfante = () => {
               <Typography.Text type="secondary">
                 Referencia:{" "}
                 {ultimaMedicion && ultimaMedicion.edad_meses < 24
-                  ? "WHO"
+                  ? "OMS"
                   : "CDC"}
               </Typography.Text>
             }
@@ -185,6 +187,12 @@ export const FichaInfante = () => {
                 {actual.categoria}), z = {actual.z.toFixed(2)}
               </Typography.Paragraph>
             )}
+            <GraficaCrecimiento
+              indicador={indicador}
+              sexo={infante.sexo}
+              nombre={infante.nombre_completo}
+              mediciones={mediciones}
+            />
           </Card>
           <Card
             title="Mediciones"
@@ -227,7 +235,20 @@ export const FichaInfante = () => {
                 render={(v) => v ?? "N/A"}
               />
               <Table.Column dataIndex="imc" title="IMC" align="right" />
-              {esAdmin && <Table.Column<Medicion> />}
+              {esAdmin && (
+                <Table.Column<Medicion>
+                  title=""
+                  render={(_, m) => (
+                    <Button
+                      size="small"
+                      type="link"
+                      onClick={() => corregir(m.id)}
+                    >
+                      Corregir
+                    </Button>
+                  )}
+                />
+              )}
             </Table>
           </Card>
         </Col>
@@ -356,7 +377,7 @@ export const FichaInfante = () => {
           </Space>
         </Col>
       </Row>
-      {Modal}
+      {modal}
     </>
   );
 };

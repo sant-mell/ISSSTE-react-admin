@@ -352,8 +352,8 @@ INSERT INTO Categoria_Nutricional (id_indicador, etiqueta, nivel_riesgo, z_min, 
     ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Obesidad', 'riesgo', 3, NULL);
 
 INSERT INTO Version_Referencia (fuente, nombre, vigente, id_usuario_carga) VALUES
-    ('OMS', 'OMS 2006-2007', 1, (SELECT id_usuario FROM Usuario WHERE email = 'admin@issste.gob.mx')),
-    ('CDC', 'CDC 2000', 0, (SELECT id_usuario FROM Usuario WHERE email = 'admin@issste.gob.mx'));
+    ('OMS', 'OMS 2024', 1, (SELECT id_usuario FROM Usuario WHERE email = 'admin@issste.gob.mx')),
+    ('CDC', 'CDC 2024', 0, (SELECT id_usuario FROM Usuario WHERE email = 'admin@issste.gob.mx'));
 
 -- =============================================================================
 -- EXPEDIENTE DEL INFANTE · datos ficticios; nombre, apellidos, CURP, teléfono y email van cifrados (AES-256-GCM)

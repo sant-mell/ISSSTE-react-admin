@@ -1,0 +1,11 @@
+.ficha-encabezado {
+  margin: 1rem 0 1.5rem;
+}
+
+.ficha-indicadores {
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+.ficha-indicadores .ant-segmented-group {
+  flex-wrap: wrap;
+}
