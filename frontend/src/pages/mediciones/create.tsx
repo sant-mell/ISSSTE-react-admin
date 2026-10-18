@@ -251,14 +251,14 @@ export const RegistrarMedicion = () => {
                         suffix="kg"
                       />
                       <Statistic
-                        title="Peso"
-                        value={ultima.peso_kg}
-                        suffix="kg"
+                        title="Talla"
+                        value={ultima.talla_cm}
+                        suffix="cm"
                       />
                       <Statistic
-                        title="Peso"
-                        value={ultima.peso_kg}
-                        suffix="kg"
+                        title="Perímetro Cefálico"
+                        value={ultima.perimetro_cefalico_cm ?? "-"}
+                        suffix="cm"
                       />
                     </Flex>
                     <Alert
