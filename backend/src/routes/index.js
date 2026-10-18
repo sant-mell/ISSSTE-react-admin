@@ -7,6 +7,7 @@ import catalogos from "./catalogos.js";
 import mediciones from "./mediciones.js";
 import referencias from "./referencias.js";
 import usuarios from "./usuarios.js";
+import ebdi from "./ebdi.js";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/catalogos", catalogos);
 router.use("/mediciones", mediciones);
 router.use("/referencias", referencias);
 router.use("/usuarios", usuarios);
+router.use("/ebdi", ebdi);
 
 export default router;

@@ -20,7 +20,7 @@ import { Inicio } from "./pages/inicio/index.tsx";
 import { ListaInfantes, FichaInfante, EditarInfante } from "./pages/infantes";
 import { RegistrarMedicion } from "./pages/mediciones";
 import { EditarUsuario, ListaUsuarios, NuevoUsuario } from "./pages/usuarios";
-//import { EditarEbdi, ListaEbdi } from "./pages/ebdi";
+import { EditarEbdi, ListaEbdi } from "./pages/ebdi";
 
 dayjs.locale("es");
 
@@ -160,7 +160,7 @@ export default function App() {
                 </Route>
 
                 {/* Módulo: EBDI */}
-                {/*<Route path="/ebdi">
+                <Route path="/ebdi">
                   <Route
                     index
                     element={
@@ -177,7 +177,7 @@ export default function App() {
                       </SoloRoles>
                     }
                   />
-                </Route>*/}
+                </Route>
 
                 {/* Ruta de captura para páginas no encontradas (404) */}
                 <Route path="*" element={<ErrorComponent />} />
