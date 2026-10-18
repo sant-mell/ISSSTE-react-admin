@@ -1,0 +1,1 @@
+export { RegistrarMedicion } from "./create.tsx"

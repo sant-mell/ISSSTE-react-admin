@@ -15,10 +15,9 @@ import { LayoutPrivado, SoloRoles } from "./components";
 import { Login } from "./pages/login";
 import "@ant-design/v5-patch-for-react-19";
 import { Inicio } from "./pages/inicio/index.tsx";
-import { PERSONAL } from "./utils/padron";
-import { ListaInfantes, FichaInfante } from "./pages/infantes";
-//import { EditarInfante, FichaInfante, ListaInfantes } from "./pages/infantes";
-//import { RegistrarMedicion } from "./pages/mediciones";
+import { PERSONAL, ROL } from "./utils/padron";
+import { ListaInfantes, FichaInfante, EditarInfante } from "./pages/infantes";
+import { RegistrarMedicion } from "./pages/mediciones";
 //import { EditarUsuario, ListaUsuarios, NuevoUsuario } from "./pages/usuarios";
 //import { EditarEbdi, ListaEbdi } from "./pages/ebdi";
 //import { PERSONAL, ROL } from "./utils/padron";
@@ -90,7 +89,23 @@ export default function App() {
                     }
                   />
                   <Route path=":id" element={<FichaInfante />} />
+                  <Route
+                    path=":id/editar"
+                    element={
+                      <SoloRoles roles={[ROL.admin]}>
+                        <EditarInfante />
+                      </SoloRoles>
+                    }
+                  />
                 </Route>
+                <Route
+                  path="/mediciones/nueva"
+                  element={
+                    <SoloRoles roles={[ROL.admin, ROL.estancia]}>
+                      <RegistrarMedicion />
+                    </SoloRoles>
+                  }
+                />
               </Route>
 
               {/* Rutas publicas */}

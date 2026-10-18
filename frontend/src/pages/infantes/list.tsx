@@ -3,7 +3,12 @@ import { useTable } from "@refinedev/antd";
 import { Button, Card, Input, Select, Space, Table, Typography } from "antd";
 import { Link, useNavigate } from "react-router";
 import { useCatalogos } from "../../hooks/useCatalogos.ts";
-import { ROL, type Identidad, type Infante } from "../../utils/padron";
+import {
+  aCapital,
+  ROL,
+  type Identidad,
+  type Infante,
+} from "../../utils/padron";
 
 // Lista de Infantes
 export const ListaInfantes = () => {
@@ -109,7 +114,11 @@ export const ListaInfantes = () => {
         <Table.Column dataIndex="curp" title="CURP" />
         <Table.Column dataIndex="ebdi" title="EBDI" />
         <Table.Column dataIndex="estado" title="Estado" />
-        <Table.Column dataIndex="municipio" title="Municipio" />
+        <Table.Column
+          dataIndex="municipio"
+          title="Municipio"
+          render={(m) => aCapital(m)}
+        />
         {puedeMedir && (
           <Table.Column<Infante>
             title=""
