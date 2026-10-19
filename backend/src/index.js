@@ -41,13 +41,19 @@ app.get("/api/health", async (req, res) => {
 app.use("/api", rutas);
 
 // Control de errores
+const ERRORES_DB = {
+  ER_DUP_ENTRY: [409, "Ya existe un registro con esos datos"],
+  ER_CONSTRAINT_FAILED: [400, "Un dato está fuera del rango permitido"],
+};
+
 app.use((error, req, res, next) => {
-  const estado = error.status || 500;
+  const [estado, mensaje] = ERRORES_DB[error.db] ?? [error.status || 500];
   if (estado === 500) console.error(error);
 
   res.status(estado).json({
     mensaje:
-      estado === 500 ? "Error interno del servidor" : "Solicitud invalida",
+      mensaje ??
+      (estado === 500 ? "Error interno del servidor" : "Solicitud inválida"),
   });
 });
 

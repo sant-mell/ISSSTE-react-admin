@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
     condiciones.push(
       "(e.nombre LIKE ? OR e.numero LIKE ? OR e.municipio LIKE ?)",
     );
-    params.push(`${q}`, `${q}`, `${q}`);
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
   }
 
   const filas = await pool.query(

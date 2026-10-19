@@ -22,7 +22,7 @@ async function validar(d, esNuevo) {
   }
 
   if (esNuevo && !d.password) return { error: "La contraseña es obligatoria" };
-  if (d.password && d.password < 8)
+  if (d.password && d.password.length < 8)
     return { error: "La contraseña debe tener al menos 8 caracteres" };
 
   const [rol] = await pool.query(
@@ -74,7 +74,7 @@ router.get("/", async (req, res) => {
 
   if (q) {
     condiciones.push("(u.nombre LIKE ? OR u.email LIKE ?)");
-    params.push(`${q}, ${q}`);
+    params.push(`%${q}%`, `%${q}%`);
   }
 
   if (id_rol) {
@@ -101,7 +101,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const [usuario] = await pool.query(
     `SELECT id_usuario AS id, nombre, email, id_rol, activo, intentos_fallidos >= ? AS bloqueado
-        FROM Usuarios WHERE id_usuario = ?`,
+        FROM Usuario WHERE id_usuario = ?`,
     [MAX_INTENTOS, req.params.id],
   );
 
@@ -115,7 +115,7 @@ router.get("/:id", async (req, res) => {
     [req.params.id],
   );
 
-  const ids = (campo) => alcances.map((a) => a[campo].filter(Boolean));
+  const ids = (campo) => alcances.map((a) => a[campo]).filter(Boolean);
 
   res.json({
     ...usuario,

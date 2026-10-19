@@ -127,7 +127,7 @@ export async function recalcularInfante(db, idInfante) {
     [idInfante],
   );
 
-  for (const { idMedicion } of mediciones) {
+  for (const { id_medicion } of mediciones) {
     await evaluarMedicion(db, id_medicion);
   }
 }

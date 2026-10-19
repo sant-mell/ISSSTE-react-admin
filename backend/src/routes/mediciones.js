@@ -16,10 +16,10 @@ function validarMedicion(
   if (!fecha || fecha > hoy)
     return "La fecha es obligatoria y no puede ser futura";
   if (fecha < infante.fecha_nacimiento) return "Debe ser una fecha valída";
-  if (!(peso_kg >= 0.1 && peso_kg <= 80))
-    return "El peso debe estar entre 0.1 y 80kg";
-  if (!(talla_cm >= 1 && talla_cm <= 200))
-    return "La talla debe estar entew 1 y 200 cm";
+  if (!(peso_kg >= 0.2 && peso_kg <= 80))
+    return "El peso debe estar entre 0.2 y 80kg";
+  if (!(talla_cm >= 20 && talla_cm <= 200))
+    return "La talla debe estar entew 20 y 200 cm";
   if (
     perimetro_cefalico_cm &&
     !(perimetro_cefalico_cm >= 20 && perimetro_cefalico_cm <= 70)
