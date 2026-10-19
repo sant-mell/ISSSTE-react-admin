@@ -26,19 +26,13 @@ const ARCHIVOS = [
   ["OMS", "ha", 2, "WHO-Girls-Length-for-age-Percentiles.csv", true],
   ["OMS", "wh", 1, "WHO-Boys-Weight-for-length-Percentiles.csv", true],
   ["OMS", "wh", 2, "WHO-Girls-Weight-for-length-Percentiles.csv", true],
-  [
-    "OMS",
-    "hc",
-    1,
-    "WHO-Boys-Head-Circumference-for-age-Percentiles.csv",
-    false,
-  ],
+  ["OMS", "hc", 1, "WHO-Boys-Head-Circumference-for-age-Percentiles.csv", true],
   [
     "OMS",
     "hc",
     2,
     "WHO-Girls-Head-Circumference-for-age-Percentiles.csv",
-    false,
+    true,
   ],
 
   // CDC: 2 a 20 años

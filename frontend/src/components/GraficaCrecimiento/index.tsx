@@ -44,6 +44,12 @@ const EJES: Record<
     ejeX: "Edad (meses)",
     ejeY: "IMC (kg/m²)",
   },
+  hc: {
+    x: (m) => m.edad_meses,
+    y: (m) => m.perimetro_cefalico_cm ?? 0,
+    ejeX: "Edad (meses)",
+    ejeY: "Perímetro cefálico (cm)",
+  },
 };
 
 export const GraficaCrecimiento = ({
@@ -71,7 +77,7 @@ export const GraficaCrecimiento = ({
     config: {
       query: { indicador, sexo, desde, hasta, edad: mediciones[0]?.edad_meses },
     },
-    queryOptions: { enabled: puntos.length > 0 },
+    queryOptions: { enabled: puntos.length > 0, retry: false },
   });
 
   if (puntos.length === 0) {
@@ -82,7 +88,8 @@ export const GraficaCrecimiento = ({
 
   if (query.isLoading) return <Spin />;
 
-  const curvas = (result?.data ?? []).flatMap((c) => [
+  const referencia = Array.isArray(result?.data) ? result.data : [];
+  const curvas = referencia.flatMap((c) => [
     { x: c.x, y: c.p95, serie: "Percentil 95" },
     { x: c.x, y: c.p50, serie: "Percentil 50" },
     { x: c.x, y: c.p5, serie: "Percentil 5" },

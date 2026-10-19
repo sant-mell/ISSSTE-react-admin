@@ -326,7 +326,8 @@ INSERT INTO Indicador (codigo, nombre, tipo_x) VALUES
     ('wa', 'Peso para la edad', 'edad'),
     ('ha', 'Talla para la edad', 'edad'),
     ('wh', 'Peso para la talla', 'talla'),
-    ('bmi', 'IMC para la edad', 'edad');
+    ('bmi', 'IMC para la edad', 'edad'),
+    ('hc', 'Perímetro cefálico para la edad', 'edad');
 
 -- Convención de rangos: z_min <= z < z_max (NULL = sin límite)
 INSERT INTO Categoria_Nutricional (id_indicador, etiqueta, nivel_riesgo, z_min, z_max) VALUES
@@ -345,11 +346,16 @@ INSERT INTO Categoria_Nutricional (id_indicador, etiqueta, nivel_riesgo, z_min, 
     ((SELECT id_indicador FROM Indicador WHERE codigo = 'wh'), 'Sobrepeso', 'atención', 2, 3),
     ((SELECT id_indicador FROM Indicador WHERE codigo = 'wh'), 'Obesidad', 'riesgo', 3, NULL),
     ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Desnutrición severa', 'riesgo', NULL, -3),
-    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Desnutrición moderada', 'atención', -3, -2),
-    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Normal', 'normal', -2, 1),
-    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Riesgo de sobrepeso', 'atención', 1, 2),
-    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Sobrepeso', 'atención', 2, 3),
-    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Obesidad', 'riesgo', 3, NULL);
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Desnutrición moderada', 'riesgo', -3, -2),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Bajo peso', 'atención', NULL, -1.645),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Peso saludable', 'normal', -1.645, 1.036),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Sobrepeso', 'atención', 1.036, 1.645),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'bmi'), 'Obesidad', 'riesgo', 1.645, NULL),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'hc'), 'Perímetro cefálico muy bajo', 'riesgo', NULL, -3),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'hc'), 'Perímetro cefálico bajo', 'atención', -3, -2),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'hc'), 'Perímetro cefálico normal', 'normal', -2, 2),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'hc'), 'Perímetro cefálico alto', 'atención', 2, 3),
+    ((SELECT id_indicador FROM Indicador WHERE codigo = 'hc'), 'Perímetro cefálico muy alto', 'riesgo', 3, NULL);
 
 INSERT INTO Version_Referencia (fuente, nombre, vigente, id_usuario_carga) VALUES
     ('OMS', 'OMS 2024', 1, (SELECT id_usuario FROM Usuario WHERE email = 'admin@issste.gob.mx')),

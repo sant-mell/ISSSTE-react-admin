@@ -6,6 +6,7 @@ const LIMITES_BIV = {
   ha: [-6, 6],
   wh: [-5, 5],
   bmi: [-5, 5],
+  hc: [-5, 5],
 };
 
 const redondear = (valor, decimales) => Number(valor.toFixed(decimales));
@@ -77,7 +78,7 @@ export async function buscarLMS(db, fuente, codigo, sexo, x) {
 // Calcular las mediciones
 export async function evaluarMedicion(db, idMedicion) {
   const [m] = await db.query(
-    `SELECT m.fecha, m.peso_kg, m.talla_cm, i.sexo, i.fecha_nacimiento
+    `SELECT m.fecha, m.peso_kg, m.talla_cm, m.perimetro_cefalico_cm, i.sexo, i.fecha_nacimiento
         FROM Medicion_Infante m
         JOIN Infante i ON i.id_infante = m.id_infante
         WHERE m.id_medicion = ?`,
@@ -92,6 +93,7 @@ export async function evaluarMedicion(db, idMedicion) {
     ha: { x: edad, y: m.talla_cm },
     wh: { x: m.talla_cm, y: m.peso_kg },
     bmi: { x: edad, y: imc(m.peso_kg, m.talla_cm) },
+    hc: { x: edad, y: m.perimetro_cefalico_cm },
   };
 
   await db.query("DELETE FROM Evaluacion_Nutricional WHERE id_medicion = ?", [
@@ -99,6 +101,7 @@ export async function evaluarMedicion(db, idMedicion) {
   ]);
 
   for (const [codigo, { x, y }] of Object.entries(valores)) {
+    if (y === null) continue; // Sin dato
     const lms = await buscarLMS(db, fuente, codigo, m.sexo, x);
     if (!lms) continue;
 

@@ -129,7 +129,7 @@ export const FichaInfante = () => {
                   {formatoFecha(
                     dayjs(ultimaMedicion.fecha)
                       .add(MEDICION_CADA_DIAS, "day")
-                      .format("DD-MM-YYYY"),
+                      .format("YYYY-MM-DD"),
                   )}
                 </Tag>
               )}
@@ -216,7 +216,9 @@ export const FichaInfante = () => {
               />
               <Table.Column<Medicion>
                 title="Edad"
-                render={(_, m) => formatoEdad(m.fecha)}
+                render={(_, m) =>
+                  formatoEdad(infante.fecha_nacimiento, m.fecha)
+                }
               />
               <Table.Column
                 dataIndex="peso_kg"
@@ -256,20 +258,34 @@ export const FichaInfante = () => {
         <Col xs={24} lg={8}>
           <Space direction="vertical" size={24} style={{ width: "100%" }}>
             <Card title="Indicadores actuales">
-              {ultimaMedicion ? (
+              {mediciones && mediciones.length > 0 ? (
                 <List
                   size="small"
                   dataSource={Object.entries(INDICADORES)}
                   renderItem={([codigo, nombre]) => {
+                    const ultimaMedicionConIndicador = mediciones.find(
+                      (m) => m.evaluaciones[codigo as CodigoIndicador],
+                    );
                     const ev =
-                      ultimaMedicion.evaluaciones[codigo as CodigoIndicador];
+                      ultimaMedicionConIndicador?.evaluaciones[
+                        codigo as CodigoIndicador
+                      ];
+
                     return (
                       <List.Item
                         extra={
                           ev ? (
-                            <Tag color={COLOR_NIVEL[ev.nivel]}>
-                              P{Math.round(ev.percentil)} - {ev.categoria}
-                            </Tag>
+                            <Space direction="vertical" align="end" size={0}>
+                              <Tag color={COLOR_NIVEL[ev.nivel]}>
+                                {ev.categoria}
+                              </Tag>
+                              <Typography.Text
+                                type="secondary"
+                                style={{ fontSize: "0.75rem" }}
+                              >
+                                {formatoFecha(ultimaMedicionConIndicador.fecha)}
+                              </Typography.Text>
+                            </Space>
                           ) : (
                             <Typography.Text type="secondary">
                               No aplica

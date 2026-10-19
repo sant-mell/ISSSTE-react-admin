@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 export const ROL = {
   admin: "Administrador",
-  coordinador: "Coordinador Regional",
+  coordinador: "Coordinador regional",
   estancia: "Personal de estancia",
 };
 export const PERSONAL = [ROL.admin, ROL.coordinador, ROL.estancia];
@@ -19,7 +19,7 @@ export type Evaluacion = {
   z: number;
   percentil: number;
   categoria: string;
-  nivel: "normal" | "precaución" | "riesgo";
+  nivel: "normal" | "atención" | "riesgo";
   biv: number;
 };
 
@@ -32,7 +32,7 @@ export type Medicion = {
   observaciones: string | null;
   edad_meses: number;
   imc: number;
-  evaluaciones: Partial<Record<"wa" | "ha" | "wh" | "bmi", Evaluacion>>;
+  evaluaciones: Partial<Record<CodigoIndicador, Evaluacion>>;
 };
 
 export type Infante = {
@@ -69,12 +69,13 @@ export const INDICADORES = {
   wa: "Peso para la edad",
   wh: "Peso para la talla",
   bmi: "IMC para la edad",
+  hc: "Perímetro cefálico para la edad",
 } as const;
 export type CodigoIndicador = keyof typeof INDICADORES;
 
 export const COLOR_NIVEL: Record<string, string> = {
   normal: "green",
-  precaución: "gold",
+  atención: "gold",
   riesgo: "red",
 };
 
@@ -83,8 +84,8 @@ export const MEDICION_CADA_DIAS = 45;
 export const formatoFecha = (fecha: string) =>
   dayjs(fecha).format("DD/MM/YYYY");
 
-export function formatoEdad(fechaNacimiento: string) {
-  const meses = dayjs().diff(dayjs(fechaNacimiento), "month");
+export function formatoEdad(fechaNacimiento: string, hasta?: string) {
+  const meses = dayjs(hasta).diff(dayjs(fechaNacimiento), "month");
   const years = Math.floor(meses / 12);
   return `${years} ${years === 1 ? "año" : "años"} ${meses % 12} ${
     meses % 12 === 1 ? "mes" : "meses"
