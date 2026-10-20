@@ -1,6 +1,15 @@
 import { useGetIdentity } from "@refinedev/core";
-import { useTable } from "@refinedev/antd";
-import { Button, Card, Input, Select, Space, Table, Typography } from "antd";
+import { CreateButton, useTable } from "@refinedev/antd";
+import {
+  Button,
+  Card,
+  Flex,
+  Input,
+  Select,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import { Link, useNavigate } from "react-router";
 import { useCatalogos } from "../../hooks/useCatalogos.ts";
 import {
@@ -38,9 +47,12 @@ export const ListaInfantes = () => {
 
   return (
     <>
-      <Typography.Title level={2} className="titulo-pagina">
-        Niñas y niños
-      </Typography.Title>
+      <Flex justify="space-between" align="center">
+        <Typography.Title level={2} className="titulo-pagina">
+          Niñas y niños
+        </Typography.Title>
+        <CreateButton>Nuevo infante</CreateButton>
+      </Flex>
 
       <Card style={{ marginBottom: 16 }}>
         <Space wrap size="middle">

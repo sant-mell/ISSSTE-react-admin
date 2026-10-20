@@ -17,7 +17,12 @@ import { PERSONAL, ROL } from "./utils/padron";
 
 import { Login } from "./pages/login";
 import { Inicio } from "./pages/inicio/index.tsx";
-import { ListaInfantes, FichaInfante, EditarInfante } from "./pages/infantes";
+import {
+  ListaInfantes,
+  FichaInfante,
+  EditarInfante,
+  CrearInfante,
+} from "./pages/infantes";
 import { RegistrarMedicion } from "./pages/mediciones";
 import { EditarUsuario, ListaUsuarios, NuevoUsuario } from "./pages/usuarios";
 import { EditarEbdi, ListaEbdi } from "./pages/ebdi";
@@ -74,6 +79,7 @@ export default function App() {
                 list: "/infantes",
                 show: "/infantes/:id",
                 edit: "/infantes/:id/editar",
+                create: "/infantes/nuevo",
                 meta: { label: "Niñas y niños" },
               },
               {
@@ -130,6 +136,14 @@ export default function App() {
                     element={
                       <SoloRoles roles={[ROL.admin]}>
                         <EditarInfante />
+                      </SoloRoles>
+                    }
+                  />
+                  <Route
+                    path="nuevo"
+                    element={
+                      <SoloRoles roles={[ROL.admin, ROL.coordinador]}>
+                        <CrearInfante />
                       </SoloRoles>
                     }
                   />
