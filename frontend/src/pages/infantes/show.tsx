@@ -332,16 +332,28 @@ export const FichaInfante = () => {
                   },
                   {
                     label: "Madre, padre o tutor",
-                    children: infante.tutor ? (
-                      <Space direction="vertical" size={0}>
-                        <span>{`${aCapital(infante.tutor.nombre)} - ${aCapital(
-                          infante.tutor.parentesco,
-                        )}`}</span>
-                        <span>{`Teléfono: ${infante.tutor.telefono}`}</span>
-                      </Space>
-                    ) : (
-                      "N/A"
-                    ),
+                    children:
+                      infante.tutores && infante.tutores.length > 0 ? (
+                        <Space direction="vertical" size="small">
+                          {infante.tutores.map((t, i) => (
+                            <Space
+                              direction="vertical"
+                              size={0}
+                              key={t.telefono || i}
+                            >
+                              {t.es_principal && (
+                                <Tag color="blue">Principal</Tag>
+                              )}
+                              <span>{`${aCapital(t.nombre)} (${aCapital(
+                                t.parentesco,
+                              )})`}</span>
+                              <span>{`Teléfono: ${t.telefono}`}</span>
+                            </Space>
+                          ))}
+                        </Space>
+                      ) : (
+                        "N/A"
+                      ),
                   },
                 ]}
               />

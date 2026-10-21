@@ -54,7 +54,7 @@ export type Infante = {
   municipio: string;
   estado: string;
   region: string;
-  tutor?: { nombre: string; telefono: string; parentesco: string } | null;
+  tutores?: Tutor[] | null;
   historial?: {
     id: number;
     fecha: string;
@@ -62,6 +62,13 @@ export type Infante = {
     diagnostico: string | null;
     observaciones: string | null;
   }[];
+};
+
+export type Tutor = {
+  nombre: string;
+  telefono: string;
+  parentesco: string;
+  es_principal?: boolean;
 };
 
 export const INDICADORES = {

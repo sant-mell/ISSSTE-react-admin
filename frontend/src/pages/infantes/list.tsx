@@ -28,6 +28,15 @@ export const ListaInfantes = () => {
   const { tableProps, filters, setFilters } = useTable<Infante>({
     syncWithLocation: true,
     pagination: { pageSize: 10 },
+    filters: {
+      initial: [
+        {
+          field: "estatus",
+          operator: "eq",
+          value: "activo",
+        },
+      ],
+    },
   });
 
   const valor = (campo: string) =>
@@ -60,7 +69,7 @@ export const ListaInfantes = () => {
             <Select
               allowClear
               placeholder="Región"
-              style={{ width: 160 }}
+              style={{ width: 200 }}
               options={regiones}
               value={region}
               onChange={(v) =>
@@ -90,7 +99,7 @@ export const ListaInfantes = () => {
               showSearch
               optionFilterProp="label"
               placeholder="EBDI"
-              style={{ width: 220 }}
+              style={{ width: 200 }}
               value={valor("id_ebdi")}
               options={ebdis
                 .filter(
@@ -108,9 +117,21 @@ export const ListaInfantes = () => {
           <Input.Search
             allowClear
             placeholder="Buscar por nombre o matrícula"
-            style={{ width: 280 }}
+            style={{ width: 300 }}
             defaultValue={valor("q")}
             onSearch={(texto) => aplicar({ q: texto || undefined })}
+          />
+          <Select
+            allowClear
+            placeholder="Estatus"
+            style={{ width: 200 }}
+            value={valor("estatus")}
+            options={[
+              { label: "Activo", value: "activo" },
+              { label: "Egresado", value: "egresado" },
+              { label: "Baja", value: "baja" },
+            ]}
+            onChange={(v) => aplicar({ estatus: v })}
           />
         </Space>
       </Card>

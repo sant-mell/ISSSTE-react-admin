@@ -164,7 +164,7 @@ export async function infanteVisible(sesion, idInfante) {
 
 // GET /api/infantes
 router.get("/", async (req, res) => {
-  const { id_region, id_estado, id_ebdi, q } = req.query;
+  const { id_region, id_estado, id_ebdi, q, estatus } = req.query;
   const alcance = filtroAlcance(req.sesion);
   const condiciones = [alcance.sql];
   const params = [...alcance.params];
@@ -180,6 +180,10 @@ router.get("/", async (req, res) => {
   if (id_ebdi) {
     condiciones.push("e.id_ebdi = ?");
     params.push(id_ebdi);
+  }
+  if (estatus) {
+    condiciones.push("i.estatus = ?");
+    params.push(estatus);
   }
 
   const sql = `SELECT ${COLUMNAS} ${DESDE} WHERE ${condiciones.join(" AND ")}`;
@@ -217,12 +221,23 @@ router.get("/:id", async (req, res) => {
   if (!fila)
     return res.status(404).json({ mensaje: "No se encontró el registro" });
 
-  const [tutor] = await pool.query(
+  const tutoresFilas = await pool.query(
     `SELECT t.nombre, t.apellido_paterno, t.apellido_materno, t.telefono, it.parentesco
     FROM Infante_Tutor it JOIN Tutor t ON t.id_tutor = it.id_tutor
-    WHERE it.id_infante = ? AND it.tutor_principal = 1`,
+    WHERE it.id_infante = ?
+    ORDER BY it.tutor_principal DESC`,
     [fila.id_infante],
   );
+
+  const tutores = tutoresFilas.map((t) => ({
+    nombre: [t.nombre, t.apellido_paterno, t.apellido_materno]
+      .map(descifrar)
+      .filter(Boolean)
+      .join(" "),
+    telefono: descifrar(t.telefono),
+    parentesco: t.parentesco,
+    es_principal: Boolean(t.tutor_principal),
+  }));
 
   const historial = await pool.query(
     `SELECT id_historial AS id, fecha, antecedente, diagnostico, observaciones
@@ -232,14 +247,7 @@ router.get("/:id", async (req, res) => {
 
   res.json({
     ...aRespuesta(fila),
-    tutor: tutor && {
-      nombre: [tutor.nombre, tutor.apellido_paterno, tutor.apellido_materno]
-        .map(descifrar)
-        .filter(Boolean)
-        .join(" "),
-      telefono: descifrar(tutor.telefono),
-      parentesco: tutor.parentesco,
-    },
+    tutores,
     historial,
   });
 });
