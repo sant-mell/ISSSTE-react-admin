@@ -60,7 +60,7 @@ export const ListaInfantes = () => {
         <Typography.Title level={2} className="titulo-pagina">
           Niñas y niños
         </Typography.Title>
-        <CreateButton>Nuevo infante</CreateButton>
+        {puedeMedir && <CreateButton>Nuevo infante</CreateButton>}
       </Flex>
 
       <Card style={{ marginBottom: 16 }}>

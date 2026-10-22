@@ -16,7 +16,7 @@ const MENU = [
     roles: [ROL.admin, ROL.estancia],
   },
   { key: "/usuarios", label: "Usuarios", roles: [ROL.admin] },
-  { key: "/ebdi", label: "EBDIs", roles: PERSONAL },
+  { key: "/ebdi", label: "EBDIs", roles: [ROL.admin, ROL.coordinador] },
 ];
 
 export const LayoutPrivado = ({ children }: { children: ReactNode }) => {

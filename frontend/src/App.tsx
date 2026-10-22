@@ -55,7 +55,7 @@ const traducciones: Record<string, string> = {
 const i18nProvider = {
   translate: (clave: string, _opciones?: unknown, porDefecto?: string) =>
     traducciones[clave] ?? porDefecto ?? clave,
-  changeLocale: async () => {},
+  changeLocale: async () => { },
   getLocale: () => "es",
 };
 
@@ -143,7 +143,7 @@ export default function App() {
                   <Route
                     path="nuevo"
                     element={
-                      <SoloRoles roles={[ROL.admin, ROL.coordinador]}>
+                      <SoloRoles roles={[ROL.admin, ROL.estancia]}>
                         <CrearInfante />
                       </SoloRoles>
                     }
@@ -179,7 +179,7 @@ export default function App() {
                   <Route
                     index
                     element={
-                      <SoloRoles roles={PERSONAL}>
+                      <SoloRoles roles={[ROL.admin, ROL.coordinador]}>
                         <ListaEbdi />
                       </SoloRoles>
                     }
