@@ -218,7 +218,7 @@ export const CrearInfante = () => {
                     name="sexo"
                     rules={[{ required: true }]}
                   >
-                    <Radio.Group>
+                    <Radio.Group aria-label="Sexo">
                       <Radio value={1}>Masculino</Radio>
                       <Radio value={2}>Femenino</Radio>
                     </Radio.Group>
@@ -372,7 +372,7 @@ export const CrearInfante = () => {
                               name={[name, "parentesco"]}
                               rules={[{ required: true }]}
                             >
-                              <Select options={PARENTESCOS}></Select>
+                              <Select options={PARENTESCOS} aria-label="Parentesco"></Select>
                             </Form.Item>
                           </Col>
                         </Row>
@@ -396,7 +396,7 @@ export const CrearInfante = () => {
                 required
                 style={{ marginTop: 16, marginBottom: 0 }}
               >
-                <Radio.Group options={opcionesPrincipal} />
+                <Radio.Group options={opcionesPrincipal} aria-label="Persona principal de contacto" />
               </Form.Item>
             </Card>
             <Card

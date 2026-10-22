@@ -93,3 +93,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.25rem;
 }
+
+.login .ant-input::placeholder {
+  color: #777777;
+  opacity: 1;
+}

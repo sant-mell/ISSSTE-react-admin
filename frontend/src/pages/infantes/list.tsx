@@ -68,6 +68,7 @@ export const ListaInfantes = () => {
           {regiones.length > 1 && (
             <Select
               allowClear
+              aria-label="Filtrar por región"
               placeholder="Región"
               style={{ width: 200 }}
               options={regiones}
@@ -85,6 +86,7 @@ export const ListaInfantes = () => {
             <Select
               allowClear
               showSearch
+              aria-label="Filtrar por estado"
               optionFilterProp="label"
               placeholder="Estado"
               style={{ width: 200 }}
@@ -97,6 +99,7 @@ export const ListaInfantes = () => {
             <Select
               allowClear
               showSearch
+              aria-label="Filtrar por EBDI"
               optionFilterProp="label"
               placeholder="EBDI"
               style={{ width: 200 }}
@@ -116,6 +119,7 @@ export const ListaInfantes = () => {
           )}
           <Input.Search
             allowClear
+            aria-label="Buscar por nombre o matrícula"
             placeholder="Buscar por nombre o matrícula"
             style={{ width: 300 }}
             defaultValue={valor("q")}
@@ -123,6 +127,7 @@ export const ListaInfantes = () => {
           />
           <Select
             allowClear
+            aria-label="Filtrar por EBDI"
             placeholder="Estatus"
             style={{ width: 200 }}
             value={valor("estatus")}

@@ -34,6 +34,7 @@ const tema = {
   token: {
     colorPrimary: "#9b2247",
     colorLink: "#9b2247",
+    colorTextSecondary: "#777777",
     fontFamily: "'Noto Sans', system-ui, sans-serif",
     borderRadius: 4,
   },

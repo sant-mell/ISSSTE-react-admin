@@ -48,6 +48,7 @@ export const ListaUsuarios = () => {
           <Select
             allowClear
             placeholder="Rol"
+            aria-label="Rol"
             style={{ width: 220 }}
             value={valor("id_rol")}
             options={roles.data.map((r) => ({ value: r.id, label: r.rol }))}
@@ -71,7 +72,9 @@ export const ListaUsuarios = () => {
               u.bloqueado ? (
                 <Tag color="red">Bloqueado</Tag>
               ) : u.activo ? (
-                <Tag color="green">Activo</Tag>
+                <Tag style={{ backgroundColor: "#f6ffed", color: "#30860b", borderColor: "#b7eb8f",}}>
+                  Activo
+                </Tag>
               ) : (
                 <Tag>Inactivo</Tag>
               )

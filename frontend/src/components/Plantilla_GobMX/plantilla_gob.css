@@ -121,3 +121,48 @@
     gap: 1.5rem;
   }
 }
+
+
+/* Acccesibilidad */
+:root {
+  --texto-secundario: #595959;
+}
+
+/* Etiquetas y descripciones */
+.gob .ant-typography-secondary,
+.gob .ant-form-item-optional,
+.gob .ant-empty-description,
+.gob .ant-descriptions-item-label,
+.gob .ant-statistic-title {
+  color: var(--texto-secundario) !important;
+}
+
+/* Placeholders */
+.gob .ant-input::placeholder,
+.gob .ant-input-affix-wrapper .ant-input::placeholder,
+.gob .ant-select .ant-select-selection-placeholder,
+.gob .ant-picker .ant-picker-input > input::placeholder,
+.gob .ant-picker-range .ant-picker-input > input::placeholder {
+  color: var(--texto-secundario) !important;
+  opacity: 1 !important;
+}
+
+/* Enlaces */
+.gob a,
+.gob a:visited {
+  color: var(--texto-secundario) !important;
+}
+
+/* Pie de página */
+.gob .gob-pie a,
+.gob .gob-pie a:visited {
+  color: #fff !important;
+}
+
+/* Cajas */
+.gob .ant-segmented.ficha-indicadores .ant-segmented-item-label,
+.gob .ant-segmented.ficha-indicadores
+  .ant-segmented-item-selected
+  .ant-segmented-item-label {
+  color: var(--texto-secundario) !important;
+}

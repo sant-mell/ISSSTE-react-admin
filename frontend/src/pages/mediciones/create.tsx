@@ -118,6 +118,7 @@ export const RegistrarMedicion = () => {
                 <Select
                   {...selectProps}
                   showSearch
+                  aria-label="Buscar niña o niño por nombre o matrícula"
                   placeholder="Escribe nombre o matrícula"
                   style={{ width: "100%" }}
                   onChange={(valor) => setParams({ infante: String(valor) })}
@@ -160,7 +161,7 @@ export const RegistrarMedicion = () => {
                   </Col>
                   <Col xs={24} md={12}>
                     <Form.Item label="Responsable de la medición" required>
-                      <Input value={yo?.nombre} disabled />
+                      <Input value={yo?.nombre} disabled aria-hidden="true"/>
                     </Form.Item>
                   </Col>
                 </Row>

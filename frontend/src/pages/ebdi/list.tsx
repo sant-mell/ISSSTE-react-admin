@@ -38,6 +38,7 @@ export const ListaEbdi = () => {
           <Select
             allowClear
             placeholder="Tipo"
+            aria-label="Tipo"
             style={{ width: 180 }}
             value={valor("tipo_ebdi")}
             options={["Propias", "Contratadas", "OSC"].map((t) => ({
@@ -58,25 +59,25 @@ export const ListaEbdi = () => {
 
       <Table {...tableProps} rowKey="id" scroll={{ x: 900 }}>
         <Table.Column dataIndex="numero" title="Número" />
-        <Table.Column dataIndex="nombre" title="Número" />
-        <Table.Column dataIndex="tipo_ebdi" title="Número" />
-        <Table.Column dataIndex="estado" title="Número" />
+        <Table.Column dataIndex="nombre" title="Nombre" />
+        <Table.Column dataIndex="tipo_ebdi" title="Tipo" />
+        <Table.Column dataIndex="estado" title="Estado" />
         <Table.Column
           dataIndex="municipio"
-          title="Número"
+          title="Municipio"
           render={(m) => aCapital(m)}
         />
-        <Table.Column dataIndex="region" title="Número" />
+        <Table.Column dataIndex="region" title="Región" />
         <Table.Column
           dataIndex="infantes_activos"
-          title="Número"
+          title="Cantidad de Infantes"
           align="right"
         />
         <Table.Column
           dataIndex="activo"
           title="Estado"
           render={(a: number) =>
-            a ? <Tag color="green">Activa</Tag> : <Tag>Inactiva</Tag>
+            a ? <Tag style={{ backgroundColor: "#f6ffed", color: "#30860b", borderColor: "#b7eb8f",}}>Activa</Tag> : <Tag>Inactiva</Tag>
           }
         />
         {yo?.rol === ROL.admin && (

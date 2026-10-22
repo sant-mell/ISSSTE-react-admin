@@ -80,7 +80,7 @@ export const Login = () => {
                   />
                 </Form.Item>
 
-                <Form.Item label="Contraseña" required>
+                <Form.Item label="Contraseña" required htmlFor="password">
                   <div className="login-contrasena">
                     <Form.Item
                       name="password"

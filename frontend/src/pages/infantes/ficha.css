@@ -9,3 +9,14 @@
 .ficha-indicadores .ant-segmented-group {
   flex-wrap: wrap;
 }
+
+.ant-select .ant-select-selection-placeholder {
+  color: #777777;
+  opacity: 1;
+}
+
+.ant-input::placeholder,
+.ant-input-affix-wrapper .ant-input::placeholder {
+  color: #777777;
+  opacity: 1;
+}
